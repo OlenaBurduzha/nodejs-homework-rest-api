@@ -1,19 +1,19 @@
 const express = require("express");
 
-const { validation, ctrlWrapper } = require("../../middlewares");
+const { auth, validation, ctrlWrapper } = require("../../middlewares");
 const { joiSchema, statusJoiSchema } = require("../../models/contact");
 const { contacts: ctrl } = require("../../controllers");
 
 const router = express.Router();
 
 // повертає масив всіх контактів в json-форматі зі статусом 200
-router.get("/", ctrlWrapper(ctrl.getContacts));
+router.get("/", auth, ctrlWrapper(ctrl.getContacts));
 
 // GET /api/contacts/:id
 router.get("/:id", ctrlWrapper(ctrl.getContactById));
 
 // процес додавання нового контакту + обробка помилок
-router.post("/", validation(joiSchema), ctrlWrapper(ctrl.postContact));
+router.post("/", auth, validation(joiSchema), ctrlWrapper(ctrl.postContact));
 
 // PUT /api/contacts/:id
 router.put("/:id", validation(joiSchema), ctrlWrapper(ctrl.putContact));
